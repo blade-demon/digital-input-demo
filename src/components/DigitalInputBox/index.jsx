@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from "react";
+import "./index.css";
 // 公共数字输入框组件
 const DigitalInputBox = ({
   length = 6,
@@ -41,6 +42,7 @@ const DigitalInputBox = ({
     if (autoFocus && inputRef.current && !disabled) {
       // 延迟聚焦以确保DOM完全渲染
       setTimeout(() => {
+        alert("focus!!!!");
         inputRef.current?.focus();
       }, 100);
     }
@@ -53,46 +55,24 @@ const DigitalInputBox = ({
       const hasValue = i < value.length;
       const isActive = i === value.length && !disabled;
 
+      // 构建CSS类名
+      const boxClasses = [
+        "digital-input-box",
+        error && "digital-input-box--error",
+        hasValue && "digital-input-box--has-value",
+        disabled && "digital-input-box--disabled",
+        isActive && "digital-input-box--active",
+      ]
+        .filter(Boolean)
+        .join(" ");
+
       boxes.push(
-        <div
-          key={i}
-          style={{
-            width: "48px",
-            height: "48px",
-            border: error
-              ? "2px solid #ef4444"
-              : hasValue
-              ? "2px solid #3b82f6"
-              : "2px solid #d1d5db",
-            borderRadius: "8px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "24px",
-            fontWeight: "bold",
-            transition: "all 0.2s",
-            backgroundColor: disabled
-              ? "#f3f4f6"
-              : hasValue
-              ? "#eff6ff"
-              : "#ffffff",
-            boxShadow: isActive
-              ? "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(59, 130, 246, 0.2)"
-              : "none",
-          }}
-        >
+        <div key={i} className={boxClasses}>
           {hasValue &&
             (isPassword ? (
-              <div
-                style={{
-                  width: "8px",
-                  height: "8px",
-                  backgroundColor: "#1f2937",
-                  borderRadius: "50%",
-                }}
-              />
+              <div className="digital-input-password-dot" />
             ) : (
-              <span style={{ color: "#1f2937" }}>{value[i]}</span>
+              <span className="digital-input-number">{value[i]}</span>
             ))}
         </div>
       );
@@ -101,15 +81,14 @@ const DigitalInputBox = ({
   };
 
   return (
-    <div style={{ position: "relative", ...className }}>
+    <div className={`digital-input-container ${className}`}>
       {/* 可视化输入框 */}
       <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "12px",
-          cursor: disabled ? "not-allowed" : "pointer",
-        }}
+        className={`digital-input-boxes ${
+          disabled
+            ? "digital-input-boxes--disabled"
+            : "digital-input-boxes--enabled"
+        }`}
         onClick={handleClick}
       >
         {renderInputBoxes()}
@@ -125,20 +104,7 @@ const DigitalInputBox = ({
         onChange={(e) => handleInputChange(e.target.value)}
         disabled={disabled}
         placeholder={placeholder}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          opacity: 0,
-          zIndex: 10,
-          fontSize: "16px", // 防止iOS缩放
-          border: "none",
-          outline: "none",
-          background: "transparent",
-          cursor: "pointer",
-        }}
+        className="digital-input-hidden"
         autoComplete="off"
         autoCapitalize="off"
         autoCorrect="off"

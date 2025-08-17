@@ -48,7 +48,7 @@ const SMSVerificationCode = () => {
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-xl font-bold text-center text-gray-900 mb-2">
-        短信验证
+        短信验证111
       </h2>
       <p className="text-center text-gray-600 mb-8">
         验证码已发送至 138****8888

@@ -106,7 +106,9 @@ const TradingPasswordSetup = () => {
           </h2>
           <p className="text-gray-600 mb-6">
             您的交易密码已成功设置
-            {secondPassword && <span className="hidden">密码: {secondPassword}</span>}
+            {secondPassword && (
+              <span className="hidden">密码: {secondPassword}</span>
+            )}
           </p>
           <button
             onClick={resetToFirstStep}
