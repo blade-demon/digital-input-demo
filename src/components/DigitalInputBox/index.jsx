@@ -28,23 +28,11 @@ const DigitalInputBox = ({
     }
   };
 
-  // 处理点击事件 - 确保输入框获得焦点
-  const handleClick = () => {
-    if (!disabled && inputRef.current) {
-      inputRef.current.focus();
-      // 对于移动设备，可能需要触发点击事件
-      inputRef.current.click();
-    }
-  };
-
   // 自动聚焦
   useEffect(() => {
     if (autoFocus && inputRef.current && !disabled) {
-      // 延迟聚焦以确保DOM完全渲染
-      setTimeout(() => {
-        alert("focus!!!!");
-        inputRef.current?.focus();
-      }, 100);
+      // 尝试自动聚焦（在某些移动设备上可能无效，需要用户交互）
+      inputRef.current.focus();
     }
   }, [autoFocus, disabled]);
 
@@ -82,18 +70,6 @@ const DigitalInputBox = ({
 
   return (
     <div className={`digital-input-container ${className}`}>
-      {/* 可视化输入框 */}
-      <div
-        className={`digital-input-boxes ${
-          disabled
-            ? "digital-input-boxes--disabled"
-            : "digital-input-boxes--enabled"
-        }`}
-        onClick={handleClick}
-      >
-        {renderInputBoxes()}
-      </div>
-
       {/* 隐藏的实际输入框 - 用于触发移动端数字键盘 */}
       <input
         ref={inputRef}
@@ -111,6 +87,17 @@ const DigitalInputBox = ({
         spellCheck="false"
         maxLength={length}
       />
+
+      {/* 可视化输入框 */}
+      <div
+        className={`digital-input-boxes ${
+          disabled
+            ? "digital-input-boxes--disabled"
+            : "digital-input-boxes--enabled"
+        }`}
+      >
+        {renderInputBoxes()}
+      </div>
     </div>
   );
 };
