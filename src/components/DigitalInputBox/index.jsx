@@ -27,10 +27,22 @@ const DigitalInputBox = ({
     }
   };
 
+  // 处理点击事件 - 确保输入框获得焦点
+  const handleClick = () => {
+    if (!disabled && inputRef.current) {
+      inputRef.current.focus();
+      // 对于移动设备，可能需要触发点击事件
+      inputRef.current.click();
+    }
+  };
+
   // 自动聚焦
   useEffect(() => {
     if (autoFocus && inputRef.current && !disabled) {
-      inputRef.current.focus();
+      // 延迟聚焦以确保DOM完全渲染
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
     }
   }, [autoFocus, disabled]);
 
@@ -98,7 +110,7 @@ const DigitalInputBox = ({
           gap: "12px",
           cursor: disabled ? "not-allowed" : "pointer",
         }}
-        onClick={() => !disabled && inputRef.current?.focus()}
+        onClick={handleClick}
       >
         {renderInputBoxes()}
       </div>
@@ -106,7 +118,7 @@ const DigitalInputBox = ({
       {/* 隐藏的实际输入框 - 用于触发移动端数字键盘 */}
       <input
         ref={inputRef}
-        type="number"
+        type="tel"
         inputMode="numeric"
         pattern="[0-9]*"
         value={value}
@@ -114,12 +126,23 @@ const DigitalInputBox = ({
         disabled={disabled}
         placeholder={placeholder}
         style={{
-          opacity: 0,
           position: "absolute",
-          zIndex: -10,
-          pointerEvents: "none",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          opacity: 0,
+          zIndex: 10,
+          fontSize: "16px", // 防止iOS缩放
+          border: "none",
+          outline: "none",
+          background: "transparent",
+          cursor: "pointer",
         }}
         autoComplete="off"
+        autoCapitalize="off"
+        autoCorrect="off"
+        spellCheck="false"
         maxLength={length}
       />
     </div>
